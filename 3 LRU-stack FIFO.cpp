@@ -3,7 +3,7 @@
 #include <cstdlib>
 #include <iomanip>
 #include <fstream>
-#define PAGENUM 4 //Ó²¼şÖ§³ÖµÄ¿éÊı 
+#define PAGENUM 4 //ç¡¬ä»¶æ”¯æŒçš„å—æ•° 
 #define SEQLENGTH 20
 
 using namespace std;
@@ -13,8 +13,8 @@ ofstream fout("log_FIFO&LRU.txt");
 class sequence
 {
 	private:
-		int seq[SEQLENGTH];//ÇëÇóÒ³ºÅĞòÁĞ 
-		int totalpagenum;//ÇëÇóĞòÁĞ³¤¶È 
+		int seq[SEQLENGTH];//è¯·æ±‚é¡µå·åºåˆ— 
+		int totalpagenum;//è¯·æ±‚åºåˆ—é•¿åº¦ 
 	public:
 		sequence()
 		{
@@ -29,7 +29,7 @@ class sequence
 		{
 			return seq;
 		}
-		int tpn()//·µ»ØÇëÇóĞòÁĞ³¤¶È 
+		int tpn()//è¿”å›è¯·æ±‚åºåˆ—é•¿åº¦ 
 		{
 			return totalpagenum;
 		}
@@ -38,9 +38,9 @@ class sequence
 class list
 {
 	private:
-		int page;//´¢´æµÄÒ³ºÅ 
-		list *pre;//Ç°Ò»¸ö¿é 
-		list *next;//nºóÒ»¸ö¿é 
+		int page;//å‚¨å­˜çš„é¡µå· 
+		list *pre;//å‰ä¸€ä¸ªå— 
+		list *next;//nåä¸€ä¸ªå— 
 	public:
 		list()
 		{
@@ -55,19 +55,19 @@ class list
 		{
 			page = i;
 		}
-		void append(list *block)//Á¬½Óµ½Î²Ö¸Õë 
+		void append(list *block)//è¿æ¥åˆ°å°¾æŒ‡é’ˆ 
 		{
 			next = block;
 		}
-		void frontie(list *block)//Á¬½Óµ½Í·Ö¸Õë 
+		void frontie(list *block)//è¿æ¥åˆ°å¤´æŒ‡é’ˆ 
 		{
 			pre = block;
 		}
-		int g()//g·µ»Ø¿éÖĞ´¢´æµÄÒ³ºÅ 
+		int g()//gè¿”å›å—ä¸­å‚¨å­˜çš„é¡µå· 
 		{
 			return page;
 		}
-		list *g_next()//·µ»ØÏÂÒ»¸ö¿éµÄÖ¸Õë 
+		list *g_next()//è¿”å›ä¸‹ä¸€ä¸ªå—çš„æŒ‡é’ˆ 
 		{
 			return next;
 		}
@@ -87,7 +87,7 @@ class stack
 			}
 			top = -1;
 		}
-		int search(int page)//ÊäÈëÒªÕÒµÄÒ³ºÅ£¬·µ»Ø´¢´æ¸ÃÒ³´¢´æµÄÎ»ÖÃ£¬Èç¹ûÃ»ÓĞÕÒµ½£¬·µ»Ø -1
+		int search(int page)//è¾“å…¥è¦æ‰¾çš„é¡µå·ï¼Œè¿”å›å‚¨å­˜è¯¥é¡µå‚¨å­˜çš„ä½ç½®ï¼Œå¦‚æœæ²¡æœ‰æ‰¾åˆ°ï¼Œè¿”å› -1
 		{
 			for(int i =0 ;i < top + 1;i++)
 			{
@@ -98,7 +98,7 @@ class stack
 			}
 			return -1;
 		}
-		int move(int from)//½«´ÓÕ»¶¥µ½´Î=´ËÎ»ÖÃ´¢´æµÄÒ³È«²¿ÍùÏÂÒÆÒ»¸ö¿é 
+		int move(int from)//å°†ä»æ ˆé¡¶åˆ°æ¬¡=æ­¤ä½ç½®å‚¨å­˜çš„é¡µå…¨éƒ¨å¾€ä¸‹ç§»ä¸€ä¸ªå— 
 		{
 			int temp = s[from];
 			for(int i = from + 1;i < PAGENUM;i++)
@@ -107,7 +107,7 @@ class stack
 			}
 			return temp;
 		}
-		void push(int page)//½«´ËÒ³·ÅÈëÕ»¶¥ 
+		void push(int page)//å°†æ­¤é¡µæ”¾å…¥æ ˆé¡¶ 
 		{
 			if(top < PAGENUM - 1)
 			{
@@ -129,8 +129,8 @@ class LRU
 {
 	private:
 		stack s;
-		int replaced;//»»³öµÄÒ³ĞÅÏ¢ 
-		int miss_cnt;//È±Ò³¼ÆÊıÆ÷ 
+		int replaced;//æ¢å‡ºçš„é¡µä¿¡æ¯ 
+		int miss_cnt;//ç¼ºé¡µè®¡æ•°å™¨ 
 	public:
 		void print(int i,sequence seq,int flag)//flag==0 miss flag==1 hit
 		{
@@ -185,7 +185,7 @@ class LRU
 			fout<<setw(15)<<"replaced_page\n";
 			for(int i = 0;i < SEQLENGTH; i++)
 			{
-				temp = s.search(seq.g()[i]);//±£´æÒªÑ°ÕÒµÄÒ³µÄÎ»ÖÃ
+				temp = s.search(seq.g()[i]);//ä¿å­˜è¦å¯»æ‰¾çš„é¡µçš„ä½ç½®
 				if(temp != -1)//if hit
 				{
 					s.move(temp);
@@ -220,10 +220,10 @@ class FIFO
 	private:
 		list *front;
 		list *rear;
-		int i;//Ä¿Ç°ÇëÇóµÄÒ³ºÅ 
+		int i;//ç›®å‰è¯·æ±‚çš„é¡µå· 
 	//	int log[SEQLENGTH];//page missing log
-		int miss_cnt;//È±Ò³ĞÅÏ¢ 
-		int r_pno;//»»³öµÄÒ³ºÅ 
+		int miss_cnt;//ç¼ºé¡µä¿¡æ¯ 
+		int r_pno;//æ¢å‡ºçš„é¡µå· 
 	public:
 		void print(int flag,sequence s)
 		{
@@ -244,12 +244,12 @@ class FIFO
 				if(temp->g())
 				{
 					fout<<setw(9)<<temp->g();
-				    temp = temp->g_next();
+				    	temp = temp->g_next();
 				}
 				else
 				{
 					fout<<setw(9)<<" ";
-				    temp = temp->g_next();
+				        temp = temp->g_next();
 				}
 			}
 			if(!flag)//if hit(no missing page)
@@ -294,11 +294,11 @@ class FIFO
 				temp->init_set(rear,front);
 				rear = temp;
 			}
-			for(i=0;i < SEQLENGTH;i++)//i == Ä¿Ç°½øĞĞµ½ÇëÇóĞòÁĞµÄµÚ¼¸¸ö 
+			for(i=0;i < SEQLENGTH;i++)//i == ç›®å‰è¿›è¡Œåˆ°è¯·æ±‚åºåˆ—çš„ç¬¬å‡ ä¸ª 
 			{
 				temp = front;
 				f_hit = 0;//0:miss 
-				for(int j=0;j < PAGENUM;j++)//Ñ°ÕÒÇëÇóµÄÒ³µÄÎ»ÖÃ 
+				for(int j=0;j < PAGENUM;j++)//å¯»æ‰¾è¯·æ±‚çš„é¡µçš„ä½ç½® 
 				{
 					if(temp->g() == s.g()[i])//if hit
 					{
